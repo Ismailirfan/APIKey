@@ -1,6 +1,6 @@
 $(document).ready(function() {
   const API_KEY = 'AIzaSyAAVEyh_nSUsyhpZq-N1oeb1qGNanbz_Kc';
-  const FOLDER_ID = 'https://drive.google.com/drive/folders/1_iCnZEDJpQEK524YzL3v8RWUtM9sDqge?usp=sharing'; // Replace with your public Google Drive folder ID
+  const FOLDER_ID = 'website'; // Replace with your public Google Drive folder ID
 
   $('#listFiles').on('click', function() {
     listFiles();
