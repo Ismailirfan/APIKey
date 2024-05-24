@@ -35,28 +35,3 @@ function getFolderIdAndListFiles() {
     }
   });
 }
-
-function listFilesInFolder(folderId) {
-  $.ajax({
-    url: 'https://www.googleapis.com/drive/v3/files',
-    data: {
-      key: API_KEY,
-      q: "'" + folderId + "' in parents",
-      fields: 'files(id, name)',
-      pageSize: 100  // Adjust as needed based on the number of files in the folder
-    },
-    success: function(data) {
-      if (data.files && data.files.length > 0) {
-        let fileList = data.files.map(file => `${file.name} (${file.id})`);
-        $('#content').append(fileList.join('\n'));
-      } else {
-        $('#content').append('No files found in this folder.');
-      }
-    },
-    error: function(error) {
-      console.error(error);
-      $('#content').text('An error occurred while listing the files.');
-    }
-  });
-}
-  
