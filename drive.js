@@ -1,37 +1,24 @@
-const API_KEY = 'AIzaSyAAVEyh_nSUsyhpZq-N1oeb1qGNanbz_Kc';  // Replace with your API key
-
 $(document).ready(function() {
-  $('#list_files_button').click(getFolderIdAndListFiles);
-});
+  $('#fetch_files_button').click(function() {
+    const sharingLink = $('#sharing_link_input').val().trim();
 
-function getFolderIdAndListFiles() {
-  const folderName = $('#folder_name').val();
-
-  if (!folderName) {
-    $('#content').text('Please enter a folder name.');
-    return;
-  }
-
-  $.ajax({
-    url: 'https://www.googleapis.com/drive/v3/files',
-    data: {
-      key: API_KEY,
-      q: "mimeType='application/vnd.google-apps.folder' and name='" + folderName + "'",
-      fields: 'files(id, name)',
-      pageSize: 10  // You can adjust the page size as needed
-    },
-    success: function(data) {
-      if (data.files && data.files.length > 0) {
-        const folderId = data.files[0].id;  // Assuming the first matching folder is the one you want
-        $('#content').append(`Folder ID: ${folderId}\n\n`);
-        listFilesInFolder(folderId);
-      } else {
-        $('#content').text('Folder not found.');
-      }
-    },
-    error: function(error) {
-      console.error(error);
-      $('#content').text('An error occurred while searching for the folder.');
+    if (!sharingLink) {
+      $('#content').text('Please enter a sharing link.');
+      return;
     }
+
+    // Make an AJAX request to fetch files from the shared folder
+    $.ajax({
+      url: sharingLink,
+      type: 'GET',
+      success: function(data) {
+        // Process the data or display it in the content area
+        $('#content').text('Received data:\n' + JSON.stringify(data, null, 2));
+      },
+      error: function(xhr, status, error) {
+        $('#content').text('Error fetching files: ' + error);
+      }
+    });
   });
-}
+});
+      
