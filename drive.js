@@ -1,4 +1,4 @@
-const API_KEY = 'YOUR_API_KEY';  // Replace with your API key
+const API_KEY = 'AIzaSyAAVEyh_nSUsyhpZq-N1oeb1qGNanbz_Kc';  // Replace with your API key
 
 $(document).ready(function() {
   $('#list_files_button').click(getFolderIdAndListFiles);
