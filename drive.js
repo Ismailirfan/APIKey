@@ -10,7 +10,7 @@ $(document).ready(function() {
     // Make an AJAX request to fetch files from the shared folder
     $.ajax({
       url: sharingLink,
-      type: 'GET',
+      method: 'GET', // Corrected from 'type' to 'method'
       success: function(data) {
         // Process the data or display it in the content area
         $('#content').text('Received data:\n' + JSON.stringify(data, null, 2));
