@@ -29,8 +29,7 @@
           method: 'GET',
           success: function(data) {
             $('#fileList').empty();
-            data.files.forEach(file => {
-              $('#fileList').append(`<li>${file.name} - <button onclick="fetchFileContent('${file.id}')">View</button></li>`);
+            data.files.fetchFileContent('${file.id}')">`);
             });
           },
           error: function(error) {
