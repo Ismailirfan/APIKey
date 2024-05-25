@@ -5,49 +5,63 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <p>It's fetch system </p>
+    <h1>Fetch Files from Public Folder</h1>
+    <input type="text" id="folder-url" placeholder="Enter public folder URL">
+    <button id="fetch-files">Fetch Files</button>
     <div id="file-list"></div>
+
     <script>
         $(document).ready(function() {
-            // URL of the public folder
-            const publicFolderUrl = 'https://example.com/public-folder/';
+            $('#fetch-files').click(function() {
+                // Get the user-inputted public folder URL
+                const publicFolderUrl = $('#folder-url').val();
 
-            // Step 1: Fetch the directory listing page
-            $.ajax({
-                url: publicFolderUrl,
-                method: 'GET',
-                success: function(data) {
-                    // Step 2: Parse the HTML to extract file URLs
-                    const fileUrls = $(data).find('a').map(function() {
-                        const href = $(this).attr('href');
-                        // Ensure it’s not a parent directory link or a folder
-                        if (href && !href.endsWith('/') && href !== '../') {
-                            return publicFolderUrl + href;
-                        }
-                    }).get();
-
-                    // Step 3: Fetch the content of each file
-                    fileUrls.forEach(fetchFileContent);
-                },
-                error: function(error) {
-                    console.error('Error fetching directory listing:', error);
+                if (!publicFolderUrl) {
+                    alert('Please enter a public folder URL.');
+                    return;
                 }
-            });
 
-            function fetchFileContent(fileUrl) {
+                // Step 1: Fetch the directory listing page
                 $.ajax({
-                    url: fileUrl,
+                    url: publicFolderUrl,
                     method: 'GET',
-                    success: function(content) {
-                        // Assuming the content is HTML, append it to the page
-                        $('#file-list').append('<div>' + content + '</div>');
+                    success: function(data) {
+                        // Step 2: Parse the HTML to extract file URLs
+                        const fileUrls = $(data).find('a').map(function() {
+                            const href = $(this).attr('href');
+                            // Ensure it’s not a parent directory link or a folder
+                            if (href && !href.endsWith('/') && href !== '../') {
+                                return publicFolderUrl + href;
+                            }
+                        }).get();
+
+                        // Clear previous file list
+                        $('#file-list').empty();
+
+                        // Step 3: Fetch the content of each file
+                        fileUrls.forEach(fetchFileContent);
                     },
                     error: function(error) {
-                        console.error('Error fetching file content:', error);
+                        console.error('Error fetching directory listing:', error);
                     }
                 });
-            }
+
+                function fetchFileContent(fileUrl) {
+                    $.ajax({
+                        url: fileUrl,
+                        method: 'GET',
+                        success: function(content) {
+                            // Assuming the content is HTML, append it to the page
+                            $('#file-list').append('<div>' + content + '</div>');
+                        },
+                        error: function(error) {
+                            console.error('Error fetching file content:', error);
+                        }
+                    });
+                }
+            });
         });
     </script>
 </body>
-</html>
+    </html>
+    
