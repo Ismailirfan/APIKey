@@ -1,74 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Google Drive API File List</title>
-  <script src="https://apis.google.com/js/api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Drive Integration</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#fetch_files_button').click(function() {
-        const CLIENT_ID = '113274162900058432789';
-        const API_KEY = 'AIzaSyAAVEyh_nSUsyhpZq-N1oeb1qGNanbz_Kc'; // Add your API Key
-        const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
-
-        // Request user authorization for Google Drive access
-        authorizeWithGoogleDrive(CLIENT_ID, API_KEY, SCOPES)
-          .then(accessToken => {
-            // Construct the API request URL
-            const url = `https://www.googleapis.com/drive/v3/files?fields=files(id,name)`;
-
-            // Use AJAX with access token for authorization
-            $.ajax({
-              url: url,
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              },
-              success: function(data) {
-                const files = data.files || [];
-                const fileList = files.map(file => `${file.name} (ID: ${file.id})`).join('\n');
-                $('#content').text('Files:\n' + fileList);
-              },
-              error: function(xhr, status, error) {
-                $('#content').text('Error fetching files: ' + error);
-              }
-            });
-          })
-          .catch(error => {
-            $('#content').text('Authorization failed: ' + error);
-          });
-      });
-    });
-
-    // Function to handle Google Drive API authorization
-    function authorizeWithGoogleDrive(clientId, apiKey, scopes) {
-      return new Promise((resolve, reject) => {
-        gapi.load('client:auth2', () => {
-          gapi.client.init({
-            apiKey: apiKey,
-            clientId: clientId,
-            discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-            scope: scopes
-          }).then(() => {
-            const authInstance = gapi.auth2.getAuthInstance();
-            authInstance.signIn().then(user => {
-              const accessToken = user.getAuthResponse().access_token;
-              resolve(accessToken);
-            }).catch(error => {
-              reject(error);
-            });
-          }).catch(error => {
-            reject(error);
-          });
-        });
-      });
-    }
-  </script>
 </head>
 <body>
-  <input type="text" id="sharing_link_input" placeholder="Enter sharing link" />
-  <button id="fetch_files_button">Fetch Files</button>
-  <pre id="content"></pre>
-</body>
-  </html>
+  <h1>Google Drive Integration</h1>
+  <button id="listFiles">List Files</button>
+  <ul id="fileList"></ul>
   
+  <script src="drive.js"></script>
+</body>
+</html>
