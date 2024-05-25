@@ -1,6 +1,6 @@
 $(document).ready(function() {
-  const API_KEY = 'YOUR_API_KEY';
-  const FOLDER_ID = 'YOUR_PUBLIC_FOLDER_ID'; // Replace with your public Google Drive folder ID
+  const API_KEY = 'AIzaSyAAVEyh_nSUsyhpZq-N1oeb1qGNanbz_Kc';
+  const FOLDER_ID = '1_iCnZEDJpQEK524YzL3v8RWUtM9sDqge'; // Replace with your public Google Drive folder ID
 
   $('#listFiles').on('click', function() {
     listFiles();
