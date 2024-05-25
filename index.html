@@ -28,7 +28,7 @@
           success: function(data) {
             $('#fileList').empty();
             data.files.forEach(function(file) {
-              $('#fileList').append(`<li><a href="#" onclick="fetchFileContent('${file.id}')">${file.name}</a></li>`);
+              $('#fileList').append(fetchFileContent('${file.id}'));
             });
           },
           error: function(error) {
