@@ -28,7 +28,7 @@
           success: function(data) {
             $('#fileList').empty();
             data.files.forEach(function(file) {
-              $('#fileList').append(fetchFileContent('${file.id}'));
+              fetchFileContent(file.id);
             });
           },
           error: function(error) {
