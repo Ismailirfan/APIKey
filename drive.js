@@ -14,6 +14,7 @@ $(document).ready(function() {
         $('#fileList').empty();
         data.files.forEach(file => {
           $('#fileList').append(`<li>${file.name} - <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">View</a></li>`);
+          
         });
       },
       error: function(error) {
@@ -21,5 +22,17 @@ $(document).ready(function() {
       }
     });
   }
+     window.fetchFileContent = function(fileId) {
+        $.ajax({
+          url: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`,
+          method: 'GET',
+          success: function(data) {
+            $('#fileContent').html(data);
+          },
+          error: function(error) {
+            console.error('Error:', error);
+          }
+        });
+      }
 });
         
