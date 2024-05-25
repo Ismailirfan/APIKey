@@ -1,24 +1,25 @@
 $(document).ready(function() {
-  $('#fetch_files_button').click(function() {
-    const sharingLink = $('#sharing_link_input').val().trim();
+  const API_KEY = 'YOUR_API_KEY';
+  const FOLDER_ID = 'YOUR_PUBLIC_FOLDER_ID'; // Replace with your public Google Drive folder ID
 
-    if (!sharingLink) {
-      $('#content').text('Please enter a sharing link.');
-      return;
-    }
+  $('#listFiles').on('click', function() {
+    listFiles();
+  });
 
-    // Make an AJAX request to fetch files from the shared folder
+  function listFiles() {
     $.ajax({
-      url: sharingLink,
-      method: 'GET', // Corrected from 'type' to 'method'
+      url: `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&key=${API_KEY}`,
+      method: 'GET',
       success: function(data) {
-        // Process the data or display it in the content area
-        $('#content').text('Received data:\n' + JSON.stringify(data, null, 2));
+        $('#fileList').empty();
+        data.files.forEach(file => {
+          $('#fileList').append(`<li>${file.name} - <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">View</a></li>`);
+        });
       },
-      error: function(xhr, status, error) {
-        $('#content').text('Error fetching files: ' + error);
+      error: function(error) {
+        console.error('Error:', error);
       }
     });
-  });
+  }
 });
-      
+        
