@@ -28,8 +28,9 @@
           url: `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType='text/html'&key=${API_KEY}`,
           method: 'GET',
           success: function(data) {
-            $('#fileList').empty();
-            data.files.fetchFileContent('${file.id}')">`);
+              $('#fileList').empty();
+            data.files.forEach(function(file) {
+              $('#fileList').append(`<li><a href="#" onclick="fetchFileContent('${file.id}')">${file.name}</a></li>`);
             });
           },
           error: function(error) {
@@ -43,7 +44,8 @@
           url: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`,
           method: 'GET',
           success: function(data) {
-            $('#fileContent').html(data);
+               $('#fileContent').html(data);
+            $('#fileModal').modal('show'); // Show the modal with fetched content
           },
           error: function(error) {
             console.error('Error:', error);
