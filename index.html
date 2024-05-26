@@ -13,7 +13,6 @@
     <script>
         $(document).ready(function() {
             $('#fetch-files').click(function() {
-                // Get the user-inputted public folder URL
                 const publicFolderUrl = $('#folder-url').val();
 
                 if (!publicFolderUrl) {
@@ -29,9 +28,8 @@
                         // Step 2: Parse the HTML to extract file URLs
                         const fileUrls = $(data).find('a').map(function() {
                             const href = $(this).attr('href');
-                            // Ensure it’s not a parent directory link or a folder
                             if (href && !href.endsWith('/') && href !== '../') {
-                                return publicFolderUrl + href;
+                                return new URL(href, publicFolderUrl).href;
                             }
                         }).get();
 
@@ -51,17 +49,43 @@
                         url: fileUrl,
                         method: 'GET',
                         success: function(content) {
-                            // Assuming the content is HTML, append it to the page
-                            $('#file-list').append('<div>' + content + '</div>');
+                            // Check content type
+                            const contentType = contentTypeFromUrl(fileUrl);
+                            if (contentType === 'image') {
+                                $('#file-list').append('<div><img src="' + fileUrl + '" alt="Image file"></div>');
+                            } else if (contentType === 'text') {
+                                $('#file-list').append('<div><pre>' + escapeHtml(content) + '</pre></div>');
+                            } else {
+                                $('#file-list').append('<div>Unsupported file type: ' + fileUrl + '</div>');
+                            }
                         },
                         error: function(error) {
                             console.error('Error fetching file content:', error);
                         }
                     });
                 }
+
+                function contentTypeFromUrl(url) {
+                    const extension = url.split('.').pop().toLowerCase();
+                    if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
+                        return 'image';
+                    } else if (['txt', 'html', 'js', 'css', 'json', 'xml'].includes(extension)) {
+                        return 'text';
+                    } else {
+                        return 'unknown';
+                    }
+                }
+
+                function escapeHtml(unsafe) {
+                    return unsafe
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                }
             });
         });
     </script>
 </body>
-    </html>
-    
+</html>
